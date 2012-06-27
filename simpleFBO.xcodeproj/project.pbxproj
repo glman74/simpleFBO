@@ -28,16 +28,16 @@
 		3DDEFCA5159B640C00B4EC41 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
 		3DDEFCA7159B640C00B4EC41 /* GLKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GLKit.framework; path = System/Library/Frameworks/GLKit.framework; sourceTree = SDKROOT; };
 		3DDEFCA9159B640C00B4EC41 /* OpenGLES.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGLES.framework; path = System/Library/Frameworks/OpenGLES.framework; sourceTree = SDKROOT; };
-		3DDEFCAD159B640C00B4EC41 /* simpleFBO-Info.plist */ = {isa = PBXFileReference; path = "simpleFBO-Info.plist"; sourceTree = "<group>"; };
+		3DDEFCAD159B640C00B4EC41 /* simpleFBO-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "simpleFBO-Info.plist"; sourceTree = "<group>"; };
 		3DDEFCAF159B640C00B4EC41 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		3DDEFCB1159B640C00B4EC41 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
-		3DDEFCB3159B640C00B4EC41 /* simpleFBO-Prefix.pch */ = {isa = PBXFileReference; path = "simpleFBO-Prefix.pch"; sourceTree = "<group>"; };
-		3DDEFCB4159B640C00B4EC41 /* AppDelegate.h */ = {isa = PBXFileReference; path = AppDelegate.h; sourceTree = "<group>"; };
+		3DDEFCB3159B640C00B4EC41 /* simpleFBO-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "simpleFBO-Prefix.pch"; sourceTree = "<group>"; };
+		3DDEFCB4159B640C00B4EC41 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		3DDEFCB5159B640C00B4EC41 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
 		3DDEFCB8159B640C00B4EC41 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = en; path = en.lproj/MainStoryboard.storyboard; sourceTree = "<group>"; };
 		3DDEFCBA159B640C00B4EC41 /* Shader.fsh */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.glsl; name = Shader.fsh; path = Shaders/Shader.fsh; sourceTree = "<group>"; };
 		3DDEFCBC159B640C00B4EC41 /* Shader.vsh */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.glsl; name = Shader.vsh; path = Shaders/Shader.vsh; sourceTree = "<group>"; };
-		3DDEFCBE159B640C00B4EC41 /* ViewController.h */ = {isa = PBXFileReference; path = ViewController.h; sourceTree = "<group>"; };
+		3DDEFCBE159B640C00B4EC41 /* ViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ViewController.h; sourceTree = "<group>"; };
 		3DDEFCBF159B640C00B4EC41 /* ViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ViewController.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
