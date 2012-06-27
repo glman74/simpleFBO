@@ -8,6 +8,9 @@
 
 attribute vec4 position;
 attribute vec3 normal;
+attribute vec2 aTexCoord;
+
+varying lowp vec2 vTexCoord;
 
 varying lowp vec4 colorVarying;
 
@@ -25,4 +28,7 @@ void main()
     colorVarying = diffuseColor * nDotVP;
     
     gl_Position = modelViewProjectionMatrix * position;
+    
+    // pass to fragment shader
+    vTexCoord = aTexCoord;
 }
