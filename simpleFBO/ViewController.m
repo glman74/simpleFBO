@@ -6,6 +6,8 @@
 //  Copyright (c) 2012 __MyCompanyName__. All rights reserved.
 //
 
+#import <QuartzCore/QuartzCore.h>
+
 #import "ViewController.h"
 
 #define BUFFER_OFFSET(i) ((char *)NULL + (i))
@@ -45,21 +47,18 @@ GLfloat gTexCoordData[] =
 
 @implementation ViewController
 
-@synthesize context = _context;
-@synthesize effect = _effect;
-
 - (void)viewDidLoad
 {
     [super viewDidLoad];
     
-    self.context = [[EAGLContext alloc] initWithAPI:kEAGLRenderingAPIOpenGLES2];
+    glContext = [[EAGLContext alloc] initWithAPI:kEAGLRenderingAPIOpenGLES2];
 
-    if (!self.context) {
+    if (!glContext) {
         NSLog(@"Failed to create ES context");
     }
     
     GLKView *view = (GLKView *)self.view;
-    view.context = self.context;
+    view.context = glContext;
     view.drawableDepthFormat = GLKViewDrawableDepthFormat24;
     
     [self setupGL];
@@ -71,10 +70,10 @@ GLfloat gTexCoordData[] =
     
     [self tearDownGL];
     
-    if ([EAGLContext currentContext] == self.context) {
+    if ([EAGLContext currentContext] == glContext) {
         [EAGLContext setCurrentContext:nil];
     }
-	self.context = nil;
+	glContext = nil;
 }
 
 - (void)didReceiveMemoryWarning
@@ -94,7 +93,7 @@ GLfloat gTexCoordData[] =
 
 - (void)setupGL
 {
-    [EAGLContext setCurrentContext:self.context];
+    [EAGLContext setCurrentContext:glContext];
     
     [self loadShaders];
         
@@ -137,11 +136,9 @@ GLfloat gTexCoordData[] =
 
 - (void)tearDownGL
 {
-    [EAGLContext setCurrentContext:self.context];
+    [EAGLContext setCurrentContext:glContext];
     
     glDeleteBuffers(1, &_vertexBuffer);
-    
-    self.effect = nil;
     
     if (_program) {
         glDeleteProgram(_program);
@@ -172,6 +169,9 @@ GLfloat gTexCoordData[] =
     // render FBO tex
     [self renderFBO];
     
+    // reset to main framebuffer
+    [((GLKView *) self.view) bindDrawable];     
+
     glViewport(0, 0, self.view.bounds.size.width, self.view.bounds.size.height);
     // render main
     glClearColor(0.65f, 0.65f, 0.65f, 1.0f);
@@ -207,6 +207,8 @@ GLfloat gTexCoordData[] =
     fbo_width = 512;
     fbo_height = 512;
     
+    glGetIntegerv(GL_FRAMEBUFFER_BINDING, &defaultFBO);
+    
     glGenFramebuffers(1, &fboHandle);
     glGenTextures(1, &fboTex);
     glGenRenderbuffers(1, &depthBuffer);
@@ -228,10 +230,12 @@ GLfloat gTexCoordData[] =
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
     
+     
     glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, fboTex, 0);
     
     glBindRenderbuffer(GL_RENDERBUFFER, depthBuffer);
     glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT24_OES, fbo_width, fbo_height);
+    
     glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, depthBuffer);
     
     // FBO status check
@@ -252,7 +256,7 @@ GLfloat gTexCoordData[] =
             break;
     }
 
-    glBindFramebuffer(GL_FRAMEBUFFER, 0);
+    glBindFramebuffer(GL_FRAMEBUFFER, defaultFBO);
 }
 
 // render FBO 
@@ -266,7 +270,7 @@ GLfloat gTexCoordData[] =
     glClearColor(0.0f, 1.0f, 0.0f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-    glBindFramebuffer(GL_FRAMEBUFFER, 0);
+    glBindFramebuffer(GL_FRAMEBUFFER, defaultFBO);
 }
 
 

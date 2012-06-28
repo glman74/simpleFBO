@@ -33,13 +33,19 @@
     
     // test
     GLuint texId;
+  
+    // GL context
+    EAGLContext *glContext;
+    
+    GLint defaultFBO;
 }
 
-@property (strong, nonatomic) EAGLContext *context;
-@property (strong, nonatomic) GLKBaseEffect *effect;
+//@property (strong, nonatomic) GLKBaseEffect *effect;
 
 - (void)setupGL;
 - (void)tearDownGL;
+- (void)setupFBO;
+
 
 - (BOOL)loadShaders;
 - (BOOL)compileShader:(GLuint *)shader type:(GLenum)type file:(NSString *)file;
