@@ -37,10 +37,10 @@ GLfloat gVertexData[] =
 
 GLfloat gTexCoordData[] = 
 {
+    1.0f, 1.0f,
     0.0f, 1.0f,
-    0.0f, 0.0f,
     1.0f, 0.0f,
-    1.0f, 1.0f
+    0.0f, 0.0f
 };
 
 @implementation ViewController
@@ -120,7 +120,19 @@ GLfloat gTexCoordData[] =
     uSamplerLoc = glGetUniformLocation(_program, "uSampler");
 
     // initialize FBO
-    [self setupFBO];    
+    [self setupFBO]; 
+    
+    // to test texturing
+    GLubyte tex[] = {255, 0, 0, 255, 0, 255, 0, 255, 0, 255, 0, 255, 255, 0, 0, 255};
+    glActiveTexture(GL_TEXTURE0);
+    glGenTextures(1, &texId);
+    glBindTexture(GL_TEXTURE_2D, texId);
+    glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_LINEAR); 
+    glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, 2, 2, 0, GL_RGBA, GL_UNSIGNED_BYTE, tex);
+    glBindTexture(GL_TEXTURE_2D, 0);
 }
 
 - (void)tearDownGL
@@ -168,12 +180,19 @@ GLfloat gTexCoordData[] =
     glEnable(GL_TEXTURE_2D);
     glActiveTexture(GL_TEXTURE0);
     
-    glUniform1i(uSamplerLoc, 0);     
     // Render 
     glUseProgram(_program);
     
+    glUniform1i(uSamplerLoc, 0);    
+    
     glUniformMatrix4fv(uniforms[UNIFORM_MODELVIEWPROJECTION_MATRIX], 1, 0, _modelViewProjectionMatrix.m);
     glUniformMatrix3fv(uniforms[UNIFORM_NORMAL_MATRIX], 1, 0, _normalMatrix.m);
+    
+    // bind to fbo texture
+    glBindTexture(GL_TEXTURE_2D, fboTex);
+    
+    // uncomment line below and comment out[self renderFBO]; above to test with normal texture
+    // glBindTexture(GL_TEXTURE_2D, texId);
     
     glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
     
@@ -206,11 +225,14 @@ GLfloat gTexCoordData[] =
     
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-    glFramebufferTexture2D(GL_DRAW_FRAMEBUFFER_APPLE, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, fboTex, 0);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+    
+    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, fboTex, 0);
     
     glBindRenderbuffer(GL_RENDERBUFFER, depthBuffer);
     glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT24_OES, fbo_width, fbo_height);
-    glFramebufferRenderbuffer(GL_DRAW_FRAMEBUFFER_APPLE, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, depthBuffer);
+    glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, depthBuffer);
     
     // FBO status check
     GLenum status;

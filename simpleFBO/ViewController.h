@@ -30,6 +30,9 @@
     GLuint fboTex;
     int fbo_width;
     int fbo_height;
+    
+    // test
+    GLuint texId;
 }
 
 @property (strong, nonatomic) EAGLContext *context;
